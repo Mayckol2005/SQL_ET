@@ -82,3 +82,22 @@ Este modelo cuenta con un total de 4 tablas en relacion a videdojuegos, la cuale
   - Gráfico de dona: Distribución de videojuegos por género.
   - Gráfico de líneas: Ventas mensuales acumuladas.
   - Gráfico de radar: Promedio de valoraciones por juego.
+
+---
+
+## Instalación y Uso
+
+- Clonar repositorio: 
+- Abrir index.html en tu navegador para acceder al login.
+- Ingresa credenciales válidas (registradas previamente en Supabase).
+
+---
+
+## Información del Proyecto
+
+- Desarrollado por:
+  - Mayckol Mardones
+  - Benjamin Garcia
+  - Martin Baza
+- Asignatura: SQL Server Aplicado 001D
+- Fecha de entrega: 

@@ -1,11 +1,11 @@
-🎮 GameStore - Documentación del Proyecto
+## 🎮 GameStore - Documentación del Proyecto
 
 📌 Descripción
 Sistema de administración para una tienda de videojuegos. Incluye autenticación segura, un dashboard interactivo y operaciones CRUD completas para la gestión de juegos, ventas, usuarios y valoraciones.
 
 ---
 
-🛠 Tecnologías Utilizadas
+## 🛠 Tecnologías Utilizadas
 - Frontend: HTML5, CSS3, JavaScript (ES6+)
 - Backend: Supabase (PostgreSQL + Autenticación)
 - Librerías:
@@ -16,7 +16,7 @@ Sistema de administración para una tienda de videojuegos. Incluye autenticació
 
 ---
 
-🗂 Estructura de Archivos
+## 🗂 Estructura de Archivos
 gamestore-admin/
 ├── public/
 │   ├── index.html          # Página de login
@@ -38,11 +38,11 @@ gamestore-admin/
 
 ---
 
-🔐 Configuración de Autenticación
+## 🔐 Configuración de Autenticación
 En assets/js/supabase.js, define las variables:
 
-const SUPABASE_URL = 'https://tudominio.supabase.co';
-const SUPABASE_KEY = 'tu-clave-publica';
+const SUPABASE_URL = '[https://tudominio.supabase.co](https://joscmwfvdczalrzgnnfu.supabase.co)';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impvc2Ntd2Z2ZGN6YWxyemdubmZ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwODY5NDIsImV4cCI6MjA2NTY2Mjk0Mn0.oKGw6MShW9azVj4jwtnZkmhAsvIzFxXKAcheVUMtQVQ';
 
 Configuración recomendada en Supabase:
 - Habilitar el proveedor Email/Password
@@ -52,25 +52,18 @@ Configuración recomendada en Supabase:
 
 ---
 
-🚀 Instalación y Uso
-
-1. Clonar el repositorio:
-git clone https://github.com/tuusuario/gamestore-admin.git
-cd gamestore-admin
-
-2. Instalar dependencias (opcional):
-npm install @supabase/supabase-js chart.js bootstrap
-
-3. Iniciar servidor de desarrollo:
-npx live-server public/
-
-4. Credenciales de prueba:
-- Admin: admin@juegos.com / admin123
-- Empleado: empleado@juegos.com / empleado123
+## Consultas SQL Avanzada
+- JOIN: Para combinar datos de compras, usuarios y videojuegos.
+- CASE: Clasificación condicional de videojuegos por precio.
+- HAVING: Filtrado de agregados.
+- EXISTS: Usado para verificar.
+- Vista (VIEW): vw_compras_mensuales.
+- Función almacenada (FUNCTION).
+- Trigger.
 
 ---
 
-🧩 Funcionalidades Clave
+## 🧩 Funcionalidades Clave
 
 🔐 Autenticación
 - Login con validación de roles (admin / empleado)
@@ -90,7 +83,7 @@ npx live-server public/
 
 ---
 
-⚙️ Configuración de la Base de Datos
+## ⚙️ Configuración de la Base de Datos
 Ejecutar el script: supabase/migrations/000_init.sql, que contiene:
 - 4 tablas relacionales
 - 7 funciones almacenadas
@@ -100,7 +93,7 @@ Ejecutar el script: supabase/migrations/000_init.sql, que contiene:
 
 ---
 
-🐛 Solución de Problemas Comunes
+## 🐛 Solución de Problemas Comunes
 
 ❌ Error de credenciales
 - Verifica que el usuario exista en auth.users
@@ -118,11 +111,6 @@ supabase.auth.getSession()
 
 ---
 
-📄 Licencia
-MIT License — Libre uso, modificación y distribución.
-
----
-
 ## Información del Proyecto
 
 - Desarrollado por:
@@ -130,4 +118,4 @@ MIT License — Libre uso, modificación y distribución.
   - Benjamin Garcia
   - Martin Baza
 - Asignatura: SQL Server Aplicado 001D
-- Fecha de entrega: 
+- Fecha de entrega: 17 Julio 2025 

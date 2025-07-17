@@ -56,3 +56,29 @@ Este modelo cuenta con un total de 4 tablas en relacion a videdojuegos, la cuale
 - videojuegos: Contiene información de títulos y precios.
 - compras: Esto contiene la fecha de la compra y el precio de esta.
 - valoraciones: Contiene la puntuacion y comentarios del videojuego.
+
+---
+
+## Consultas SQL Avanzada
+
+- JOIN: Para combinar datos de compras, usuarios y videojuegos
+- CASE: Clasificación condicional de videojuegos por precio
+- HAVING: Filtrado de agregados
+- Vista (VIEW): vw_compras_mensuales
+- Función almacenada (FUNCTION)
+- Trigger
+
+---
+
+## Frontend y Visualización
+
+- Login / Registro
+  - Interfaz moderna y responsiva con HTML5, CSS personalizado y notificaciones con Toastr.js.
+  - Validación de credenciales mediante Supabase Auth.
+  - Contraseñas protegidas con hash (bcrypt).
+ 
+- Dashboard: Gráficos implementados
+  - Gráfico de barras: Total de compras por videojuego.
+  - Gráfico de dona: Distribución de videojuegos por género.
+  - Gráfico de líneas: Ventas mensuales acumuladas.
+  - Gráfico de radar: Promedio de valoraciones por juego.

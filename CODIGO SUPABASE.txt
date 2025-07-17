@@ -1,0 +1,370 @@
+-- Eliminacion de tablas
+
+DROP TABLE usuarios CASCADE;
+DROP TABLE videojuegos CASCADE;
+DROP TABLE compras CASCADE;
+DROP TABLE valoraciones CASCADE;
+
+-- Tabla de usuarios
+CREATE TABLE IF NOT EXISTS usuarios (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  rol VARCHAR(20) DEFAULT 'cliente'
+);
+
+-- Tabla de videojuegos
+CREATE TABLE IF NOT EXISTS videojuegos (
+  id SERIAL PRIMARY KEY,
+  titulo VARCHAR(100) NOT NULL,
+  genero VARCHAR(50),
+  precio NUMERIC(10,0) NOT NULL,  
+  fecha_lanzamiento DATE,
+  stock INT DEFAULT 0
+);
+
+-- Tabla de compras
+CREATE TABLE IF NOT EXISTS compras (
+  id SERIAL PRIMARY KEY,
+  usuario_id INT REFERENCES usuarios(id) ON DELETE CASCADE,
+  videojuego_id INT REFERENCES videojuegos(id) ON DELETE CASCADE,
+  fecha_compra TIMESTAMP DEFAULT NOW(),
+  cantidad INT NOT NULL,
+  total NUMERIC(10,0) NOT NULL
+);
+
+-- Tabla de valoraciones
+CREATE TABLE IF NOT EXISTS valoraciones (
+  id SERIAL PRIMARY KEY,
+  usuario_id INT REFERENCES usuarios(id) ON DELETE CASCADE,
+  videojuego_id INT REFERENCES videojuegos(id) ON DELETE CASCADE,
+  puntuacion INT CHECK (puntuacion BETWEEN 1 AND 5),
+  comentario TEXT,
+  fecha_valoracion TIMESTAMP DEFAULT NOW()
+);
+
+-- Datos de usuarios
+INSERT INTO usuarios (email, password_hash, rol) VALUES
+('admin@juegos.com', '$2b$10$eEjZWZrTkTjUsl1XEy.YO.CA4e/9U/oHdBEm1Syc13HwzWxxX0GBK', 'admin'), -- admin123
+('cliente1@juegos.com', '$2b$10$B7MvWb9kZltEk6iOQmv7/OSAEHh1uJGK.dE5/6XKP2aTjSY.FxK2y', 'cliente'); -- cliente123
+
+-- Datos de videojuegos
+INSERT INTO videojuegos (titulo, genero, precio, fecha_lanzamiento, stock) VALUES
+('Elden Ring', 'RPG', 49990, '2022-02-25', 100),
+('God of War', 'Acción', 39990, '2018-04-20', 50),
+('Minecraft', 'Sandbox', 12990, '2011-11-18', 200),
+('FIFA 25', 'Deporte', 54990, '2024-09-15', 120),
+('Hollow Knight', 'Metroidvania', 7990, '2017-02-24', 70);
+
+-- Datos de compras
+INSERT INTO compras (usuario_id, videojuego_id, fecha_compra, cantidad, total) VALUES
+(2, 1, '2025-06-01', 1, 49990),
+(2, 2, '2025-06-03', 1, 39990),
+(2, 3, '2025-06-10', 2, 25980),
+(2, 1, '2025-07-01', 1, 49990),
+(2, 4, '2025-07-10', 1, 54990);
+
+-- Datos de valoraciones
+INSERT INTO valoraciones (usuario_id, videojuego_id, puntuacion, comentario, fecha_valoracion) VALUES
+(2, 1, 5, 'Increíble juego', '2025-06-02'),
+(2, 2, 4, 'Muy bueno', '2025-06-04'),
+(2, 3, 3, 'Entretenido', '2025-06-11'),
+(2, 4, 2, 'Podría mejorar', '2025-07-11');
+
+-- Consultas SQL Avanzadas
+
+-- Total gastado por cada usuario y cantidad de juegos comprados
+SELECT 
+  u.email,
+  COUNT(c.id) AS total_compras,
+  SUM(c.total) AS total_gastado
+FROM usuarios u
+JOIN compras c ON u.id = c.usuario_id
+GROUP BY u.email;
+
+-- Juegos más comprados (Top 3)
+SELECT 
+  v.titulo,
+  SUM(c.cantidad) AS total_vendidos
+FROM videojuegos v
+JOIN compras c ON v.id = c.videojuego_id
+GROUP BY v.titulo
+ORDER BY total_vendidos DESC
+LIMIT 3;
+
+-- Usuarios que han hecho compras mayores a $50.000
+SELECT 
+  u.email,
+  SUM(c.total) AS total_gastado
+FROM usuarios u
+JOIN compras c ON u.id = c.usuario_id
+GROUP BY u.email
+HAVING SUM(c.total) > 50000;
+
+-- Existencia de valoraciones negativas
+SELECT v.titulo
+FROM videojuegos v
+WHERE EXISTS (
+  SELECT 1
+  FROM valoraciones val
+  WHERE val.videojuego_id = v.id AND val.puntuacion <= 2
+);
+
+-- Clasificación de usuarios según gasto (CASE)
+SELECT 
+  u.email,
+  SUM(c.total) AS total_gastado,
+  CASE 
+    WHEN SUM(c.total) >= 100000 THEN 'Premium'
+    WHEN SUM(c.total) >= 50000 THEN 'Regular'
+    ELSE 'Básico'
+  END AS categoria_usuario
+FROM usuarios u
+JOIN compras c ON u.id = c.usuario_id
+GROUP BY u.email;
+
+-- Promedio de puntuación por juego
+SELECT 
+  v.titulo,
+  ROUND(AVG(val.puntuacion), 2) AS promedio_puntuacion
+FROM videojuegos v
+JOIN valoraciones val ON v.id = val.videojuego_id
+GROUP BY v.titulo;
+
+-- Juegos sin valoraciones
+SELECT v.titulo
+FROM videojuegos v
+LEFT JOIN valoraciones val ON v.id = val.videojuego_id
+WHERE val.id IS NULL;
+
+-- 2 Funciones
+
+-- Total gastado por un usuario
+CREATE OR REPLACE FUNCTION total_gasto_usuario(p_email VARCHAR)
+RETURNS NUMERIC AS $$
+DECLARE
+  total NUMERIC;
+BEGIN
+  SELECT COALESCE(SUM(c.total), 0)
+  INTO total
+  FROM compras c
+  JOIN usuarios u ON u.id = c.usuario_id
+  WHERE u.email = p_email;
+
+  RETURN total;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT total_gasto_usuario('cliente1@juegos.com');
+
+-- Promedio de puntuación de un videojuego
+CREATE OR REPLACE FUNCTION promedio_puntuacion_juego(p_videojuego_id INT)
+RETURNS NUMERIC AS $$
+DECLARE
+  promedio NUMERIC;
+BEGIN
+  SELECT ROUND(AVG(puntuacion), 2)
+  INTO promedio
+  FROM valoraciones
+  WHERE videojuego_id = p_videojuego_id;
+
+  RETURN COALESCE(promedio, 0);
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT promedio_puntuacion_juego(1);
+
+-- 2 Vistas
+
+-- Resumen de ventas por videojuego
+CREATE OR REPLACE VIEW vista_ventas_juegos AS
+SELECT 
+  v.id,
+  v.titulo,
+  SUM(c.cantidad) AS unidades_vendidas,
+  SUM(c.total) AS ingresos_totales
+FROM videojuegos v
+JOIN compras c ON v.id = c.videojuego_id
+GROUP BY v.id, v.titulo;
+
+SELECT * FROM vista_ventas_juegos;
+
+-- Valoraciones con detalles
+CREATE OR REPLACE VIEW vista_valoraciones_detalle AS
+SELECT 
+  val.id,
+  u.email,
+  v.titulo,
+  val.puntuacion,
+  val.comentario,
+  val.fecha_valoracion
+FROM valoraciones val
+JOIN usuarios u ON u.id = val.usuario_id
+JOIN videojuegos v ON v.id = val.videojuego_id;
+
+SELECT * FROM vista_valoraciones_detalle;
+
+-- 4 Triggers
+
+-- Validar stock antes de una compra
+CREATE OR REPLACE FUNCTION verificar_stock()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF (SELECT stock FROM videojuegos WHERE id = NEW.videojuego_id) < NEW.cantidad THEN
+    RAISE EXCEPTION 'Stock insuficiente para el videojuego.';
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_verificar_stock
+BEFORE INSERT ON compras
+FOR EACH ROW
+EXECUTE FUNCTION verificar_stock();
+
+-- Este insert debería FALLAR si el stock es insuficiente
+INSERT INTO compras (usuario_id, videojuego_id, cantidad, total)
+VALUES (2, 1, 1000, 49990000);
+
+-- Restar stock al comprar
+CREATE OR REPLACE FUNCTION descontar_stock()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE videojuegos
+  SET stock = stock - NEW.cantidad
+  WHERE id = NEW.videojuego_id;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_descontar_stock
+AFTER INSERT ON compras
+FOR EACH ROW
+EXECUTE FUNCTION descontar_stock();
+
+SELECT stock FROM videojuegos WHERE id = 3; <-- Se ejecuta antes de ejecutar el INSERT para ver el resultado previo y 
+                                             -- se vuelve a ejecutar nuevamente para ver el otro resultaddo
+
+INSERT INTO compras (usuario_id, videojuego_id, cantidad, total)
+VALUES (2, 3, 1, 12990);
+
+-- Evitar puntuaciones duplicadas por usuario-juego
+CREATE OR REPLACE FUNCTION evitar_duplicado_valoracion()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM valoraciones
+    WHERE usuario_id = NEW.usuario_id AND videojuego_id = NEW.videojuego_id
+  ) THEN
+    RAISE EXCEPTION 'Ya existe una valoración para este juego por este usuario.';
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_evitar_duplicado_valoracion
+BEFORE INSERT ON valoraciones
+FOR EACH ROW
+EXECUTE FUNCTION evitar_duplicado_valoracion();
+
+-- Esto debería FALLAR porque ya existe una valoración del cliente para Elden Ring
+INSERT INTO valoraciones (usuario_id, videojuego_id, puntuacion, comentario)
+VALUES (2, 1, 4, 'Repetida');
+
+-- Establecer fecha de compra si no se entrega
+CREATE OR REPLACE FUNCTION set_fecha_compra_default()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.fecha_compra IS NULL THEN
+    NEW.fecha_compra := NOW();
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_set_fecha_compra
+BEFORE INSERT ON compras
+FOR EACH ROW
+EXECUTE FUNCTION set_fecha_compra_default();
+
+-- Insertar una compra SIN fecha, el trigger la agregará automáticamente
+INSERT INTO compras (usuario_id, videojuego_id, cantidad, total)
+VALUES (2, 5, 1, 7990);
+
+SELECT * FROM compras WHERE videojuego_id = 5 ORDER BY id DESC LIMIT 1;
+
+-- 4 Procedimientos
+
+-- Insertar nueva compra con total calculado automaticamente
+CREATE OR REPLACE PROCEDURE registrar_compra(
+  p_usuario_id INT,
+  p_videojuego_id INT,
+  p_cantidad INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  v_precio NUMERIC;
+BEGIN
+  SELECT precio INTO v_precio FROM videojuegos WHERE id = p_videojuego_id;
+
+  INSERT INTO compras (usuario_id, videojuego_id, cantidad, total)
+  VALUES (p_usuario_id, p_videojuego_id, p_cantidad, v_precio * p_cantidad);
+END;
+$$;
+
+CALL registrar_compra(2, 3, 1);
+
+SELECT * FROM compras ORDER BY id DESC LIMIT 1;
+
+-- Agregar nuevo usuario
+CREATE OR REPLACE PROCEDURE crear_usuario(
+  p_email VARCHAR,
+  p_password_hash TEXT,
+  p_rol VARCHAR DEFAULT 'cliente'
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  INSERT INTO usuarios (email, password_hash, rol)
+  VALUES (p_email, p_password_hash, p_rol);
+END;
+$$;
+
+CALL crear_usuario('nuevo@user.com', '$2b$10$FakeHash123456789', 'cliente');
+
+SELECT * FROM usuarios WHERE email = 'nuevo@user.com';
+
+-- Eliminar videojuego por título
+CREATE OR REPLACE PROCEDURE eliminar_juego_por_titulo(p_titulo VARCHAR)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  DELETE FROM videojuegos WHERE titulo = p_titulo;
+END;
+$$
+
+CALL eliminar_juego_por_titulo('FIFA 25');
+
+-- No deberia aparecer
+SELECT * FROM videojuegos WHERE titulo = 'FIFA 25';
+
+-- Agregar valoración
+CREATE OR REPLACE PROCEDURE agregar_valoracion(
+  p_usuario_id INT,
+  p_videojuego_id INT,
+  p_puntuacion INT,
+  p_comentario TEXT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  INSERT INTO valoraciones (usuario_id, videojuego_id, puntuacion, comentario)
+  VALUES (p_usuario_id, p_videojuego_id, p_puntuacion, p_comentario);
+END;
+$$;
+
+CALL agregar_valoracion(2, 5, 5, 'Excelente juego');
+
+SELECT * FROM valoraciones WHERE videojuego_id = 5 ORDER BY id DESC LIMIT 1;

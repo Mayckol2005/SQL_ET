@@ -1,97 +1,125 @@
-# 🎮 Plataforma de Videojuegos
+🎮 GameStore - Documentación del Proyecto
 
-Este proyecto consiste en el desarrollo de una plataforma web tipo "Steam", donde los usuarios pueden registrarse, iniciar sesión, visualizar y comprar videojuegos. Incluye un **dashboard visual protegido**, conectado con **consultas SQL avanzadas** y una **base de datos remota en Supabase**.
-
----
-
-## Descripción del Proyecto
-
-El objetivo principal es crear una plataforma segura y funcional para la gestión de videojuegos, incluyendo:
-
-- Registro e inicio de sesión de usuarios.
-- Visualización de métricas relevantes mediante gráficos.
-- Base de datos completa en Supabase con lógica avanzada (vistas, funciones, triggers, procedimientos).
-- Interfaz moderna, responsive y con notificaciones amigables.
+📌 Descripción
+Sistema de administración para una tienda de videojuegos. Incluye autenticación segura, un dashboard interactivo y operaciones CRUD completas para la gestión de juegos, ventas, usuarios y valoraciones.
 
 ---
 
-## Tecnologías Utilizadas
-
-- **Supabase**: Backend, base de datos PostgreSQL y autenticación.
-- **PostgreSQL SQL**: Para lógica compleja (consultas, funciones, vistas, triggers).
-- **HTML5, CSS3, JavaScript**
-- **Chart.js**: Visualización de métricas en el dashboard.
-- **Toastr.js**: Notificaciones visuales.
-- **VSCode**: Entorno de desarrollo.
-
----
-
-## Módulo de Autenticación
-
-### ✔️ Características:
-
-- Registro y login conectados a Supabase Auth.
-- Contraseñas hasheadas automáticamente por Supabase.
-- Validación de acceso con `fetch()` y `supabase-js`.
-- Notificaciones con Toastr (en lugar de SweetAlert).
-
-### 📁 Archivos involucrados:
-
-```plaintext
-/plataforma-juegos/
-├── index.html              ← Login y registro
-├── dashboard.html          ← Dashboard protegido
-├── js/auth.js              ← Lógica de autenticación
-├── supabaseClient.js       ← Conexión Supabase
-├── libs/toastr.min.js      ← Librería de notificaciones
-```
+🛠 Tecnologías Utilizadas
+- Frontend: HTML5, CSS3, JavaScript (ES6+)
+- Backend: Supabase (PostgreSQL + Autenticación)
+- Librerías:
+  - Supabase JS v2
+  - Chart.js (gráficos)
+  - Bootstrap 5 (diseño responsive)
+  - Font Awesome (íconos)
 
 ---
 
-## Base de Datos en Supabase
-
-Este modelo cuenta con un total de 4 tablas en relacion a videdojuegos, la cuales serian:
-
-- usuarios: Almacena credenciales de acceso.
-- videojuegos: Contiene información de títulos y precios.
-- compras: Esto contiene la fecha de la compra y el precio de esta.
-- valoraciones: Contiene la puntuacion y comentarios del videojuego.
-
----
-
-## Consultas SQL Avanzada
-
-- JOIN: Para combinar datos de compras, usuarios y videojuegos
-- CASE: Clasificación condicional de videojuegos por precio
-- HAVING: Filtrado de agregados
-- EXISTS: Usado para verificar
-- Vista (VIEW): vw_compras_mensuales
-- Función almacenada (FUNCTION)
-- Procedimientos de almacenado
-- Trigger
+🗂 Estructura de Archivos
+gamestore-admin/
+├── public/
+│   ├── index.html          # Página de login
+│   ├── dashboard.html      # Panel de administración
+│   └── assets/
+│       ├── css/
+│       │   └── styles.css  # Estilos personalizados
+│       └── js/
+│           ├── supabase.js # Configuración de Supabase
+│           ├── auth.js     # Lógica de autenticación
+│           ├── dashboard.js# Lógica del panel principal
+│           ├── games.js    # CRUD videojuegos
+│           ├── sales.js    # Gestión de ventas
+│           ├── reviews.js  # Gestión de valoraciones
+│           └── users.js    # Gestión de usuarios
+└── supabase/
+    └── migrations/
+        └── 000_init.sql   # Esquema SQL inicial
 
 ---
 
-## Frontend y Visualización
+🔐 Configuración de Autenticación
+En assets/js/supabase.js, define las variables:
 
-- Login / Registro
-  - Interfaz moderna y responsiva con HTML5, CSS personalizado y notificaciones con Toastr.js.
-  - Validación de credenciales mediante Supabase Auth.
-  - Contraseñas protegidas con hash (bcrypt).
- 
-- Dashboard: Gráficos implementados
-  - Gráfico de barras: Total de compras por videojuego.
-  - Gráfico de dona: Distribución de videojuegos por género.
-  - Gráfico de líneas: Ventas mensuales acumuladas.
-  - Gráfico de radar: Promedio de valoraciones por juego.
+const SUPABASE_URL = 'https://tudominio.supabase.co';
+const SUPABASE_KEY = 'tu-clave-publica';
+
+Configuración recomendada en Supabase:
+- Habilitar el proveedor Email/Password
+- Configurar los Redirect URLs:
+  - http://localhost:5500/index.html
+  - http://localhost:5500/dashboard.html
 
 ---
 
-## Instalación y Uso
+🚀 Instalación y Uso
 
-- Clonar repositorio: 
-- Abrir index.html en tu navegador para acceder al login.
-- Ingresa credenciales válidas (registradas previamente en Supabase).
+1. Clonar el repositorio:
+git clone https://github.com/tuusuario/gamestore-admin.git
+cd gamestore-admin
+
+2. Instalar dependencias (opcional):
+npm install @supabase/supabase-js chart.js bootstrap
+
+3. Iniciar servidor de desarrollo:
+npx live-server public/
+
+4. Credenciales de prueba:
+- Admin: admin@juegos.com / admin123
+- Empleado: empleado@juegos.com / empleado123
+
+---
+
+🧩 Funcionalidades Clave
+
+🔐 Autenticación
+- Login con validación de roles (admin / empleado)
+- Protección de rutas
+- Manejo de sesiones
+
+📊 Dashboard
+- Estadísticas en tiempo real
+- Gráficos de ventas mensuales
+- Top 5 juegos más vendidos
+
+🧮 CRUDs
+- Videojuegos: Crear, editar y eliminar
+- Ventas: Registro y seguimiento
+- Usuarios: Gestión y asignación de roles
+- Valoraciones: Moderación de comentarios
+
+---
+
+⚙️ Configuración de la Base de Datos
+Ejecutar el script: supabase/migrations/000_init.sql, que contiene:
+- 4 tablas relacionales
+- 7 funciones almacenadas
+- 4 triggers
+- 2 vistas
+- Datos iniciales de prueba
+
+---
+
+🐛 Solución de Problemas Comunes
+
+❌ Error de credenciales
+- Verifica que el usuario exista en auth.users
+- Asegúrate que tenga relación en la tabla usuarios
+
+🌐 Problemas de CORS
+- Agrega tus URLs en la opción Site URL de Supabase
+- Revisa que los Redirect URLs estén correctamente definidos
+
+⚠️ Errores de inicialización
+// Verifica la sesión
+supabase.auth.getSession()
+  .then(console.log)
+  .catch(console.error);
+
+---
+
+📄 Licencia
+MIT License — Libre uso, modificación y distribución.
 
 ---
 

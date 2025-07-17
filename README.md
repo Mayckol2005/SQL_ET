@@ -4,7 +4,7 @@ Este proyecto consiste en el desarrollo de una plataforma web tipo "Steam", dond
 
 ---
 
-## 1️⃣ Descripción del Proyecto
+## Descripción del Proyecto
 
 El objetivo principal es crear una plataforma segura y funcional para la gestión de videojuegos, incluyendo:
 
@@ -15,7 +15,7 @@ El objetivo principal es crear una plataforma segura y funcional para la gestió
 
 ---
 
-## 2️⃣ Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 - **Supabase**: Backend, base de datos PostgreSQL y autenticación.
 - **PostgreSQL SQL**: Para lógica compleja (consultas, funciones, vistas, triggers).
@@ -26,7 +26,7 @@ El objetivo principal es crear una plataforma segura y funcional para la gestió
 
 ---
 
-## 3️⃣ Módulo de Autenticación
+## Módulo de Autenticación
 
 ### ✔️ Características:
 
@@ -44,3 +44,15 @@ El objetivo principal es crear una plataforma segura y funcional para la gestió
 ├── js/auth.js              ← Lógica de autenticación
 ├── supabaseClient.js       ← Conexión Supabase
 ├── libs/toastr.min.js      ← Librería de notificaciones
+```
+
+---
+
+## Base de Datos en Supabase
+
+Este modelo cuenta con un total de 4 tablas en relacion a videdojuegos, la cuales serian:
+
+- usuarios: Almacena credenciales de acceso.
+- videojuegos: Contiene información de títulos y precios.
+- compras: Esto contiene la fecha de la compra y el precio de esta.
+- valoraciones: Contiene la puntuacion y comentarios del videojuego.

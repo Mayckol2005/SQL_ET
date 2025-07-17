@@ -1,3 +1,5 @@
+# README - Examen Transversal
+
 ## 🎮 GameStore - Documentación del Proyecto
 
 📌 Descripción

@@ -65,6 +65,11 @@ Configuración recomendada en Supabase:
 
 ---
 
+## Instalación y Uso
+- Clonar repositorio: git clone 
+
+---
+
 ## 🧩 Funcionalidades Clave
 
 🔐 Autenticación

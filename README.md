@@ -65,8 +65,8 @@ Configuración recomendada en Supabase:
 
 ---
 
-## Instalación y Uso
-- Clonar repositorio: git clone 
+## Instalación
+- Clonar repositorio: git clone https://github.com/Mayckol2005/SQL_ET.git
 
 ---
 

@@ -64,8 +64,10 @@ Este modelo cuenta con un total de 4 tablas en relacion a videdojuegos, la cuale
 - JOIN: Para combinar datos de compras, usuarios y videojuegos
 - CASE: Clasificación condicional de videojuegos por precio
 - HAVING: Filtrado de agregados
+- EXISTS: Usado para verificar
 - Vista (VIEW): vw_compras_mensuales
 - Función almacenada (FUNCTION)
+- Procedimientos de almacenado
 - Trigger
 
 ---

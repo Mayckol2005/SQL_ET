@@ -43,8 +43,8 @@ gamestore-admin/
 ## 🔐 Configuración de Autenticación
 En assets/js/supabase.js, define las variables:
 
-const SUPABASE_URL = '[https://tudominio.supabase.co](https://joscmwfvdczalrzgnnfu.supabase.co)';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impvc2Ntd2Z2ZGN6YWxyemdubmZ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwODY5NDIsImV4cCI6MjA2NTY2Mjk0Mn0.oKGw6MShW9azVj4jwtnZkmhAsvIzFxXKAcheVUMtQVQ';
+- const SUPABASE_URL = '[https://tudominio.supabase.co](https://joscmwfvdczalrzgnnfu.supabase.co)';
+- const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impvc2Ntd2Z2ZGN6YWxyemdubmZ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwODY5NDIsImV4cCI6MjA2NTY2Mjk0Mn0.oKGw6MShW9azVj4jwtnZkmhAsvIzFxXKAcheVUMtQVQ';
 
 Configuración recomendada en Supabase:
 - Habilitar el proveedor Email/Password

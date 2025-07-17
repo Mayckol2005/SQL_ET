@@ -17,12 +17,12 @@ El objetivo principal es crear una plataforma segura y funcional para la gestió
 
 ## 2️⃣ Tecnologías Utilizadas
 
-- 🔐 **Supabase**: Backend, base de datos PostgreSQL y autenticación.
-- 🧠 **PostgreSQL SQL**: Para lógica compleja (consultas, funciones, vistas, triggers).
-- 🧰 **HTML5, CSS3, JavaScript**
-- 📊 **Chart.js**: Visualización de métricas en el dashboard.
-- ✅ **Toastr.js**: Notificaciones visuales.
-- 🛠️ **VSCode**: Entorno de desarrollo.
+- **Supabase**: Backend, base de datos PostgreSQL y autenticación.
+- **PostgreSQL SQL**: Para lógica compleja (consultas, funciones, vistas, triggers).
+- **HTML5, CSS3, JavaScript**
+- **Chart.js**: Visualización de métricas en el dashboard.
+- **Toastr.js**: Notificaciones visuales.
+- **VSCode**: Entorno de desarrollo.
 
 ---
 

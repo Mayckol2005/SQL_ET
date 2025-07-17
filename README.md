@@ -123,6 +123,5 @@ supabase.auth.getSession()
 - Desarrollado por:
   - Mayckol Mardones
   - Benjamin Garcia
-  - Martin Baza
 - Asignatura: SQL Server Aplicado 001D
 - Fecha de entrega: 17 Julio 2025 
